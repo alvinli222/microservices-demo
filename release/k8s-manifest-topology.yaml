@@ -292,6 +292,8 @@ spec:
           - containerPort: 8080
           readinessProbe:
             initialDelaySeconds: 10
+            periodSeconds: 30
+            failureThreshold: 5
             httpGet:
               path: "/_healthz"
               port: 8080
@@ -300,6 +302,8 @@ spec:
                 value: "shop_session-id=x-readiness-probe"
           livenessProbe:
             initialDelaySeconds: 10
+            periodSeconds: 30
+            failureThreshold: 5
             httpGet:
               path: "/_healthz"
               port: 8080
@@ -845,11 +849,13 @@ spec:
         ports:
         - containerPort: 6379
         readinessProbe:
-          periodSeconds: 5
+          periodSeconds: 20
+          failureThreshold: 5
           tcpSocket:
             port: 6379
         livenessProbe:
-          periodSeconds: 5
+          periodSeconds: 20
+          failureThreshold: 5
           tcpSocket:
             port: 6379
         volumeMounts:
