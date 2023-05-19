@@ -34,11 +34,11 @@ spec:
     spec:
       topologySpreadConstraints:
       - maxSkew: 1
-        topologyKey: zone
+        topologyKey: topology.kubernetes.io/zone
         whenUnsatisfiable: DoNotSchedule
         labelSelector:
           matchLabels:
-            app: frontend
+            app: emailservice
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
       securityContext:
@@ -108,11 +108,11 @@ spec:
     spec:
       topologySpreadConstraints:
       - maxSkew: 1
-        topologyKey: zone
+        topologyKey: topology.kubernetes.io/zone
         whenUnsatisfiable: DoNotSchedule
         labelSelector:
           matchLabels:
-            app: frontend
+            app: checkoutservice
       serviceAccountName: default
       securityContext:
         fsGroup: 1000
@@ -189,11 +189,11 @@ spec:
     spec:
       topologySpreadConstraints:
       - maxSkew: 1
-        topologyKey: zone
+        topologyKey: topology.kubernetes.io/zone
         whenUnsatisfiable: DoNotSchedule
         labelSelector:
           matchLabels:
-            app: frontend
+            app: recommendationservice
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
       securityContext:
@@ -267,7 +267,7 @@ spec:
     spec:
       topologySpreadConstraints:
       - maxSkew: 1
-        topologyKey: zone
+        topologyKey: topology.kubernetes.io/zone
         whenUnsatisfiable: DoNotSchedule
         labelSelector:
           matchLabels:
@@ -381,11 +381,11 @@ spec:
     spec:
       topologySpreadConstraints:
       - maxSkew: 1
-        topologyKey: zone
+        topologyKey: topology.kubernetes.io/zone
         whenUnsatisfiable: DoNotSchedule
         labelSelector:
           matchLabels:
-            app: frontend
+            app: paymentservice
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
       securityContext:
@@ -453,11 +453,11 @@ spec:
     spec:
       topologySpreadConstraints:
       - maxSkew: 1
-        topologyKey: zone
+        topologyKey: topology.kubernetes.io/zone
         whenUnsatisfiable: DoNotSchedule
         labelSelector:
           matchLabels:
-            app: frontend
+            app: productcatalogservice
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
       securityContext:
@@ -525,11 +525,11 @@ spec:
     spec:
       topologySpreadConstraints:
       - maxSkew: 1
-        topologyKey: zone
+        topologyKey: topology.kubernetes.io/zone
         whenUnsatisfiable: DoNotSchedule
         labelSelector:
           matchLabels:
-            app: frontend
+            app: cartservice
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
       securityContext:
@@ -586,7 +586,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: loadgenerator
-spec:
+spec:         
   selector:
     matchLabels:
       app: loadgenerator
@@ -598,13 +598,15 @@ spec:
       annotations:
         sidecar.istio.io/rewriteAppHTTPProbers: "true"
     spec:
-      topologySpreadConstraints:
-      - maxSkew: 1
-        topologyKey: zone
-        whenUnsatisfiable: DoNotSchedule
-        labelSelector:
-          matchLabels:
-            app: frontend
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: workload
+                operator: In
+                values:
+                - loadgenerator
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
       restartPolicy: Always
@@ -650,7 +652,7 @@ spec:
         - name: FRONTEND_ADDR
           value: "frontend:80"
         - name: USERS
-          value: "10000"
+          value: "1"
         resources:
           requests:
             cpu: 300m
@@ -675,11 +677,11 @@ spec:
     spec:
       topologySpreadConstraints:
       - maxSkew: 1
-        topologyKey: zone
+        topologyKey: topology.kubernetes.io/zone
         whenUnsatisfiable: DoNotSchedule
         labelSelector:
           matchLabels:
-            app: frontend
+            app: currencyservice
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
       securityContext:
@@ -748,11 +750,11 @@ spec:
     spec:
       topologySpreadConstraints:
       - maxSkew: 1
-        topologyKey: zone
+        topologyKey: topology.kubernetes.io/zone
         whenUnsatisfiable: DoNotSchedule
         labelSelector:
           matchLabels:
-            app: frontend
+            app: shippingservice
       serviceAccountName: default
       securityContext:
         fsGroup: 1000
@@ -820,11 +822,11 @@ spec:
     spec:
       topologySpreadConstraints:
       - maxSkew: 1
-        topologyKey: zone
+        topologyKey: topology.kubernetes.io/zone
         whenUnsatisfiable: DoNotSchedule
         labelSelector:
           matchLabels:
-            app: frontend
+            app: redis-cart
       securityContext:
         fsGroup: 1000
         runAsGroup: 1000
@@ -893,11 +895,11 @@ spec:
     spec:
       topologySpreadConstraints:
       - maxSkew: 1
-        topologyKey: zone
+        topologyKey: topology.kubernetes.io/zone
         whenUnsatisfiable: DoNotSchedule
         labelSelector:
           matchLabels:
-            app: frontend
+            app: adservice
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
       securityContext:
